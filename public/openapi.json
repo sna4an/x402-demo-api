@@ -1,0 +1,90 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "x402 Demo API",
+    "version": "1.0.0",
+    "description": "Paid API demo using x402 protocol on Base mainnet. Weather, search, and quotes with USDC micropayments.",
+    "x-guidance": "POST endpoints with JSON body. /api/weather needs {city}, /api/search needs {query}, /api/quote needs empty body {}.",
+    "contact": { "email": "sna4an@users.noreply.github.com" }
+  },
+  "servers": [{ "url": "https://x402-demo-api.vercel.app" }],
+  "paths": {
+    "/api/weather": {
+      "post": {
+        "operationId": "getWeather",
+        "summary": "Get weather data for a city",
+        "tags": ["Data"],
+        "x-payment-info": {
+          "price": { "mode": "fixed", "currency": "USD", "amount": "0.050000" },
+          "protocols": [{ "x402": {} }]
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "city": { "type": "string", "minLength": 1, "description": "City name" } },
+                "required": ["city"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Weather data" },
+          "402": { "description": "Payment Required" }
+        }
+      }
+    },
+    "/api/search": {
+      "post": {
+        "operationId": "search",
+        "summary": "Search the web",
+        "tags": ["Search"],
+        "x-payment-info": {
+          "price": { "mode": "fixed", "currency": "USD", "amount": "0.100000" },
+          "protocols": [{ "x402": {} }]
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "query": { "type": "string", "minLength": 1, "description": "Search query" } },
+                "required": ["query"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Search results" },
+          "402": { "description": "Payment Required" }
+        }
+      }
+    },
+    "/api/quote": {
+      "post": {
+        "operationId": "getQuote",
+        "summary": "Get an inspirational quote",
+        "tags": ["Fun"],
+        "x-payment-info": {
+          "price": { "mode": "fixed", "currency": "USD", "amount": "0.080000" },
+          "protocols": [{ "x402": {} }]
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "object", "properties": {} }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "A quote" },
+          "402": { "description": "Payment Required" }
+        }
+      }
+    }
+  }
+}
