@@ -11,34 +11,160 @@
   "paths": {
     "/api/weather": {
       "post": {
-        "operationId": "getWeather", "summary": "Get weather data", "tags": ["Data"],
+        "operationId": "getWeather",
+        "summary": "Get weather data for a city",
+        "tags": ["Data"],
         "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.010000" }, "protocols": [{ "x402": {} }] },
-        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "city": { "type": "string", "minLength": 1 } }, "required": ["city"] } } } },
-        "responses": { "200": { "description": "Weather data" }, "402": { "description": "Payment Required" } }
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "city": { "type": "string", "minLength": 1, "description": "City name (e.g. jakarta, tokyo, london)" } },
+                "required": ["city"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Weather data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "city": { "type": "string", "description": "City name" },
+                    "weather": { "type": "string", "description": "Weather condition" },
+                    "temperature": { "type": "number", "description": "Temperature in fahrenheit" },
+                    "unit": { "type": "string", "description": "Temperature unit" },
+                    "timestamp": { "type": "string", "format": "date-time", "description": "ISO timestamp" }
+                  },
+                  "required": ["city", "weather", "temperature", "unit", "timestamp"]
+                }
+              }
+            }
+          },
+          "402": { "description": "Payment Required" }
+        }
       }
     },
     "/api/search": {
       "post": {
-        "operationId": "search", "summary": "Search the web", "tags": ["Search"],
+        "operationId": "search",
+        "summary": "Search the web",
+        "tags": ["Search"],
         "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.010000" }, "protocols": [{ "x402": {} }] },
-        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "query": { "type": "string", "minLength": 1 } }, "required": ["query"] } } } },
-        "responses": { "200": { "description": "Search results" }, "402": { "description": "Payment Required" } }
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "query": { "type": "string", "minLength": 1, "description": "Search query" } },
+                "required": ["query"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "query": { "type": "string", "description": "Original query" },
+                    "results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "title": { "type": "string" },
+                          "url": { "type": "string", "format": "uri" },
+                          "snippet": { "type": "string" }
+                        },
+                        "required": ["title", "url", "snippet"]
+                      }
+                    }
+                  },
+                  "required": ["query", "results"]
+                }
+              }
+            }
+          },
+          "402": { "description": "Payment Required" }
+        }
       }
     },
     "/api/joke": {
       "post": {
-        "operationId": "getJoke", "summary": "Get a random joke", "tags": ["Fun"],
+        "operationId": "getJoke",
+        "summary": "Get a random programming joke",
+        "tags": ["Fun"],
         "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.010000" }, "protocols": [{ "x402": {} }] },
-        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": {} } } } },
-        "responses": { "200": { "description": "A joke" }, "402": { "description": "Payment Required" } }
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "object", "properties": {} }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "A joke",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "setup": { "type": "string", "description": "Joke setup" },
+                    "punchline": { "type": "string", "description": "Joke punchline" }
+                  },
+                  "required": ["setup", "punchline"]
+                }
+              }
+            }
+          },
+          "402": { "description": "Payment Required" }
+        }
       }
     },
     "/api/quote": {
       "post": {
-        "operationId": "getQuote", "summary": "Get an inspirational quote", "tags": ["Fun"],
+        "operationId": "getQuote",
+        "summary": "Get an inspirational quote",
+        "tags": ["Fun"],
         "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.010000" }, "protocols": [{ "x402": {} }] },
-        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": {} } } } },
-        "responses": { "200": { "description": "A quote" }, "402": { "description": "Payment Required" } }
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "type": "object", "properties": {} }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "An inspirational quote",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": { "type": "string", "description": "Quote text" },
+                    "author": { "type": "string", "description": "Quote author" }
+                  },
+                  "required": ["text", "author"]
+                }
+              }
+            }
+          },
+          "402": { "description": "Payment Required" }
+        }
       }
     }
   }
