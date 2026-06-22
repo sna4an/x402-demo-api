@@ -2,9 +2,9 @@
   "openapi": "3.1.0",
   "info": {
     "title": "x402 Demo API",
-    "version": "1.0.0",
-    "description": "Paid API demo using x402 protocol on Base mainnet. Weather, search, and quotes with USDC micropayments.",
-    "x-guidance": "POST endpoints with JSON body. /api/weather needs {city}, /api/search needs {query}, /api/quote needs empty body {}.",
+    "version": "2.0.0",
+    "description": "Paid API with real data: crypto prices, web search, translation, weather, URL info, and more. All endpoints use x402 protocol on Base mainnet.",
+    "x-guidance": "POST endpoints with JSON body. /api/crypto-price needs {coin}, /api/web-search needs {query}, /api/translate needs {text, target}, /api/url-info needs {url}, /api/weather needs {city}, /api/search needs {query}, /api/quote needs empty body {}.",
     "contact": { "email": "sna4an@users.noreply.github.com" }
   },
   "servers": [{ "url": "https://x402-demo-api-theta.vercel.app" }],
@@ -12,10 +12,10 @@
     "/api/weather": {
       "post": {
         "operationId": "getWeather",
-        "summary": "Get weather data for a city",
+        "summary": "Get weather data for a city (real data from wttr.in)",
         "tags": ["Data"],
         "x-payment-info": {
-          "price": { "mode": "fixed", "currency": "USD", "amount": "0.050000" },
+          "price": { "mode": "fixed", "currency": "USD", "amount": "0.020000" },
           "protocols": [{ "x402": {} }]
         },
         "requestBody": {
@@ -39,10 +39,10 @@
     "/api/search": {
       "post": {
         "operationId": "search",
-        "summary": "Search the web",
+        "summary": "Search the web via DuckDuckGo",
         "tags": ["Search"],
         "x-payment-info": {
-          "price": { "mode": "fixed", "currency": "USD", "amount": "0.100000" },
+          "price": { "mode": "fixed", "currency": "USD", "amount": "0.050000" },
           "protocols": [{ "x402": {} }]
         },
         "requestBody": {
@@ -69,7 +69,7 @@
         "summary": "Get an inspirational quote",
         "tags": ["Fun"],
         "x-payment-info": {
-          "price": { "mode": "fixed", "currency": "USD", "amount": "0.080000" },
+          "price": { "mode": "fixed", "currency": "USD", "amount": "0.020000" },
           "protocols": [{ "x402": {} }]
         },
         "requestBody": {
@@ -82,6 +82,117 @@
         },
         "responses": {
           "200": { "description": "A quote" },
+          "402": { "description": "Payment Required" }
+        }
+      }
+    },
+    "/api/crypto-price": {
+      "post": {
+        "operationId": "getCryptoPrice",
+        "summary": "Get real-time crypto prices from CoinGecko",
+        "tags": ["Finance"],
+        "x-payment-info": {
+          "price": { "mode": "fixed", "currency": "USD", "amount": "0.020000" },
+          "protocols": [{ "x402": {} }]
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "coin": { "type": "string", "description": "Coin name or symbol (bitcoin, eth, sol, etc)" } },
+                "required": ["coin"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Crypto price data" },
+          "402": { "description": "Payment Required" }
+        }
+      }
+    },
+    "/api/web-search": {
+      "post": {
+        "operationId": "webSearch",
+        "summary": "Web search with real results via DuckDuckGo",
+        "tags": ["Search"],
+        "x-payment-info": {
+          "price": { "mode": "fixed", "currency": "USD", "amount": "0.050000" },
+          "protocols": [{ "x402": {} }]
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "query": { "type": "string", "minLength": 1, "description": "Search query" } },
+                "required": ["query"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Search results" },
+          "402": { "description": "Payment Required" }
+        }
+      }
+    },
+    "/api/translate": {
+      "post": {
+        "operationId": "translate",
+        "summary": "Translate text between languages via LibreTranslate",
+        "tags": ["Utility"],
+        "x-payment-info": {
+          "price": { "mode": "fixed", "currency": "USD", "amount": "0.040000" },
+          "protocols": [{ "x402": {} }]
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": { "type": "string", "minLength": 1, "description": "Text to translate" },
+                  "target": { "type": "string", "description": "Target language code (default: en)" }
+                },
+                "required": ["text"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Translated text" },
+          "402": { "description": "Payment Required" }
+        }
+      }
+    },
+    "/api/url-info": {
+      "post": {
+        "operationId": "getUrlInfo",
+        "summary": "Get info about a URL (status, content-type, server, etc)",
+        "tags": ["Utility"],
+        "x-payment-info": {
+          "price": { "mode": "fixed", "currency": "USD", "amount": "0.030000" },
+          "protocols": [{ "x402": {} }]
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": { "url": { "type": "string", "minLength": 1, "description": "URL to check" } },
+                "required": ["url"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "URL info" },
           "402": { "description": "Payment Required" }
         }
       }
