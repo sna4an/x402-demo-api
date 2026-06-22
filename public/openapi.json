@@ -7,7 +7,7 @@
     "x-guidance": "POST endpoints with JSON body. /api/weather needs {city}, /api/search needs {query}, /api/quote needs empty body {}.",
     "contact": { "email": "sna4an@users.noreply.github.com" }
   },
-  "servers": [{ "url": "https://x402-demo-api.vercel.app" }],
+  "servers": [{ "url": "https://x402-demo-api-theta.vercel.app" }],
   "paths": {
     "/api/weather": {
       "post": {
