@@ -2,11 +2,7 @@
   "name": "x402-demo-api",
   "version": "1.0.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start"
-  },
+  "scripts": { "dev": "next dev", "build": "next build", "start": "next start" },
   "dependencies": {
     "@x402/core": "^2.16.0",
     "@x402/evm": "^2.16.0",
