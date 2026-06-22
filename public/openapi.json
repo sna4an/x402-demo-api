@@ -2,9 +2,9 @@
   "openapi": "3.1.0",
   "info": {
     "title": "x402 Demo API",
-    "version": "2.0.0",
-    "description": "Paid API with real data: crypto prices, web search, translation, weather, URL info, and more. All endpoints use x402 protocol on Base mainnet.",
-    "x-guidance": "POST endpoints with JSON body. /api/crypto-price needs {coin}, /api/web-search needs {query}, /api/translate needs {text, target}, /api/url-info needs {url}, /api/weather needs {city}, /api/search needs {query}, /api/quote needs empty body {}.",
+    "version": "3.0.0",
+    "description": "Paid API with real data: AI/LLM, crypto prices, web search, translation, trending topics, sentiment analysis, aggregator, and more. All endpoints use x402 protocol on Base mainnet.",
+    "x-guidance": "POST endpoints with JSON body. /api/llm needs {prompt}, /api/crypto-price needs {coin}, /api/web-search needs {query}, /api/translate needs {text, target}, /api/url-info needs {url}, /api/weather needs {city}, /api/search needs {query}, /api/sentiment needs {text}, /api/trending needs {source}, /api/aggregator needs {queries}, /api/quote needs empty body {}.",
     "contact": { "email": "sna4an@users.noreply.github.com" }
   },
   "servers": [{ "url": "https://x402-demo-api-theta.vercel.app" }],
@@ -12,28 +12,11 @@
     "/api/weather": {
       "post": {
         "operationId": "getWeather",
-        "summary": "Get weather data for a city (real data from wttr.in)",
+        "summary": "Get weather data (real-time from wttr.in)",
         "tags": ["Data"],
-        "x-payment-info": {
-          "price": { "mode": "fixed", "currency": "USD", "amount": "0.020000" },
-          "protocols": [{ "x402": {} }]
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": { "city": { "type": "string", "minLength": 1, "description": "City name" } },
-                "required": ["city"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": { "description": "Weather data" },
-          "402": { "description": "Payment Required" }
-        }
+        "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.020000" }, "protocols": [{ "x402": {} }] },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "city": { "type": "string", "minLength": 1 } }, "required": ["city"] } } } },
+        "responses": { "200": { "description": "Weather data" }, "402": { "description": "Payment Required" } }
       }
     },
     "/api/search": {
@@ -41,26 +24,9 @@
         "operationId": "search",
         "summary": "Search the web via DuckDuckGo",
         "tags": ["Search"],
-        "x-payment-info": {
-          "price": { "mode": "fixed", "currency": "USD", "amount": "0.050000" },
-          "protocols": [{ "x402": {} }]
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": { "query": { "type": "string", "minLength": 1, "description": "Search query" } },
-                "required": ["query"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": { "description": "Search results" },
-          "402": { "description": "Payment Required" }
-        }
+        "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.050000" }, "protocols": [{ "x402": {} }] },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "query": { "type": "string", "minLength": 1 } }, "required": ["query"] } } } },
+        "responses": { "200": { "description": "Search results" }, "402": { "description": "Payment Required" } }
       }
     },
     "/api/quote": {
@@ -68,49 +34,19 @@
         "operationId": "getQuote",
         "summary": "Get an inspirational quote",
         "tags": ["Fun"],
-        "x-payment-info": {
-          "price": { "mode": "fixed", "currency": "USD", "amount": "0.020000" },
-          "protocols": [{ "x402": {} }]
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": { "type": "object", "properties": {} }
-            }
-          }
-        },
-        "responses": {
-          "200": { "description": "A quote" },
-          "402": { "description": "Payment Required" }
-        }
+        "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.020000" }, "protocols": [{ "x402": {} }] },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": {} } } } },
+        "responses": { "200": { "description": "A quote" }, "402": { "description": "Payment Required" } }
       }
     },
     "/api/crypto-price": {
       "post": {
         "operationId": "getCryptoPrice",
-        "summary": "Get real-time crypto prices from CoinGecko",
+        "summary": "Real-time crypto prices from CoinGecko",
         "tags": ["Finance"],
-        "x-payment-info": {
-          "price": { "mode": "fixed", "currency": "USD", "amount": "0.020000" },
-          "protocols": [{ "x402": {} }]
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": { "coin": { "type": "string", "description": "Coin name or symbol (bitcoin, eth, sol, etc)" } },
-                "required": ["coin"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": { "description": "Crypto price data" },
-          "402": { "description": "Payment Required" }
-        }
+        "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.020000" }, "protocols": [{ "x402": {} }] },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "coin": { "type": "string", "description": "bitcoin, eth, sol, etc" } }, "required": ["coin"] } } } },
+        "responses": { "200": { "description": "Crypto price data" }, "402": { "description": "Payment Required" } }
       }
     },
     "/api/web-search": {
@@ -118,83 +54,69 @@
         "operationId": "webSearch",
         "summary": "Web search with real results via DuckDuckGo",
         "tags": ["Search"],
-        "x-payment-info": {
-          "price": { "mode": "fixed", "currency": "USD", "amount": "0.050000" },
-          "protocols": [{ "x402": {} }]
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": { "query": { "type": "string", "minLength": 1, "description": "Search query" } },
-                "required": ["query"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": { "description": "Search results" },
-          "402": { "description": "Payment Required" }
-        }
+        "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.050000" }, "protocols": [{ "x402": {} }] },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "query": { "type": "string", "minLength": 1 } }, "required": ["query"] } } } },
+        "responses": { "200": { "description": "Search results" }, "402": { "description": "Payment Required" } }
       }
     },
     "/api/translate": {
       "post": {
         "operationId": "translate",
-        "summary": "Translate text between languages via LibreTranslate",
+        "summary": "Translate text via LibreTranslate",
         "tags": ["Utility"],
-        "x-payment-info": {
-          "price": { "mode": "fixed", "currency": "USD", "amount": "0.040000" },
-          "protocols": [{ "x402": {} }]
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "text": { "type": "string", "minLength": 1, "description": "Text to translate" },
-                  "target": { "type": "string", "description": "Target language code (default: en)" }
-                },
-                "required": ["text"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": { "description": "Translated text" },
-          "402": { "description": "Payment Required" }
-        }
+        "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.040000" }, "protocols": [{ "x402": {} }] },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "text": { "type": "string", "minLength": 1 }, "target": { "type": "string" } }, "required": ["text"] } } } },
+        "responses": { "200": { "description": "Translated text" }, "402": { "description": "Payment Required" } }
       }
     },
     "/api/url-info": {
       "post": {
         "operationId": "getUrlInfo",
-        "summary": "Get info about a URL (status, content-type, server, etc)",
+        "summary": "Get info about a URL",
         "tags": ["Utility"],
-        "x-payment-info": {
-          "price": { "mode": "fixed", "currency": "USD", "amount": "0.030000" },
-          "protocols": [{ "x402": {} }]
-        },
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": { "url": { "type": "string", "minLength": 1, "description": "URL to check" } },
-                "required": ["url"]
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": { "description": "URL info" },
-          "402": { "description": "Payment Required" }
-        }
+        "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.030000" }, "protocols": [{ "x402": {} }] },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "url": { "type": "string", "minLength": 1 } }, "required": ["url"] } } } },
+        "responses": { "200": { "description": "URL info" }, "402": { "description": "Payment Required" } }
+      }
+    },
+    "/api/aggregator": {
+      "post": {
+        "operationId": "aggregate",
+        "summary": "Aggregate data from multiple sources (crypto, weather, news)",
+        "tags": ["Data"],
+        "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.080000" }, "protocols": [{ "x402": {} }] },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "queries": { "type": "array", "items": { "type": "string" }, "description": "Array of query strings" } } } } } },
+        "responses": { "200": { "description": "Aggregated data" }, "402": { "description": "Payment Required" } }
+      }
+    },
+    "/api/sentiment": {
+      "post": {
+        "operationId": "analyzeSentiment",
+        "summary": "Analyze text sentiment (positive/negative/neutral)",
+        "tags": ["AI"],
+        "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.050000" }, "protocols": [{ "x402": {} }] },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "text": { "type": "string", "minLength": 1 } }, "required": ["text"] } } } },
+        "responses": { "200": { "description": "Sentiment analysis result" }, "402": { "description": "Payment Required" } }
+      }
+    },
+    "/api/trending": {
+      "post": {
+        "operationId": "getTrending",
+        "summary": "Trending topics from Reddit, Hacker News, GitHub",
+        "tags": ["Data"],
+        "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.040000" }, "protocols": [{ "x402": {} }] },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "source": { "type": "string", "enum": ["all", "reddit", "hn", "github"], "description": "Source filter" } } } } } },
+        "responses": { "200": { "description": "Trending topics" }, "402": { "description": "Payment Required" } }
+      }
+    },
+    "/api/llm": {
+      "post": {
+        "operationId": "llmChat",
+        "summary": "AI/LLM gateway powered by Google Gemini",
+        "tags": ["AI"],
+        "x-payment-info": { "price": { "mode": "fixed", "currency": "USD", "amount": "0.100000" }, "protocols": [{ "x402": {} }] },
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "type": "object", "properties": { "prompt": { "type": "string", "minLength": 1, "description": "Your prompt to the LLM" } }, "required": ["prompt"] } } } },
+        "responses": { "200": { "description": "LLM response" }, "402": { "description": "Payment Required" } }
       }
     }
   }

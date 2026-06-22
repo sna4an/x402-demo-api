@@ -3,7 +3,7 @@ import { x402ResourceServer, HTTPFacilitatorClient } from "@x402/core/server";
 import { ExactEvmScheme } from "@x402/evm/exact/server";
 import { declareDiscoveryExtension } from "@x402/extensions/bazaar";
 
-const EVM_ADDRESS = process.env.EVM_ADDRESS as `0x\${string}`;
+const EVM_ADDRESS = process.env.EVM_ADDRESS as `0x${string}`;
 const FACILITATOR_URL = process.env.FACILITATOR_URL;
 
 if (!EVM_ADDRESS) throw new Error("EVM_ADDRESS env var required");
@@ -45,7 +45,7 @@ export const proxy = paymentProxy(
     },
     "POST /api/web-search": {
       accepts: [{ scheme: "exact" as const, price: "$0.05", network: NETWORK, payTo: EVM_ADDRESS }],
-      description: "Search the web with real results",
+      description: "Web search with real results",
       mimeType: "application/json",
       extensions: ext,
     },
@@ -58,6 +58,30 @@ export const proxy = paymentProxy(
     "POST /api/url-info": {
       accepts: [{ scheme: "exact" as const, price: "$0.03", network: NETWORK, payTo: EVM_ADDRESS }],
       description: "Get info about a URL",
+      mimeType: "application/json",
+      extensions: ext,
+    },
+    "POST /api/aggregator": {
+      accepts: [{ scheme: "exact" as const, price: "$0.08", network: NETWORK, payTo: EVM_ADDRESS }],
+      description: "Aggregate data from multiple sources (crypto, weather, news)",
+      mimeType: "application/json",
+      extensions: ext,
+    },
+    "POST /api/sentiment": {
+      accepts: [{ scheme: "exact" as const, price: "$0.05", network: NETWORK, payTo: EVM_ADDRESS }],
+      description: "Analyze text sentiment (positive/negative/neutral)",
+      mimeType: "application/json",
+      extensions: ext,
+    },
+    "POST /api/trending": {
+      accepts: [{ scheme: "exact" as const, price: "$0.04", network: NETWORK, payTo: EVM_ADDRESS }],
+      description: "Get trending topics from Reddit, Hacker News, GitHub",
+      mimeType: "application/json",
+      extensions: ext,
+    },
+    "POST /api/llm": {
+      accepts: [{ scheme: "exact" as const, price: "$0.10", network: NETWORK, payTo: EVM_ADDRESS }],
+      description: "AI/LLM gateway powered by Google Gemini",
       mimeType: "application/json",
       extensions: ext,
     },
